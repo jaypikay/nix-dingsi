@@ -20,18 +20,12 @@
   system = stdenv.hostPlatform.system;
   arch =
     {
-      aarch64-darwin = "arm64";
-      aarch64-linux = "arm64";
-      x86_64-darwin = "x64";
       x86_64-linux = "x64";
     }
     ."${system}" or (throw "Unsupported system: ${system}");
   hash =
     {
-      arm64-linux-hash = "sha256-hFZ27VAIBDW8c7oP+Nl0rj6T2CRbee8Qxf4CzZJmCL8=";
-      arm64-osx-hash = "sha256-oFqnQnbBGAD4x97FANbY091nJrzHRMewalASwgOul8s=";
-      x64-linux-hash = "sha256-ZRgCJf2GGV1B+QgmYh4OfX7nMfRBdN6pIg5pU6Q/KCQ=";
-      x64-osx-hash = "sha256-H5qLdiL4hEkg5g50zzrv1HdZMc6ji69O5GUrpHWkrdo=";
+      x64-linux-hash = "sha256-8nJWUmK/qMGMC9rDp0vGXd2WBZ8pqo075WU7emn2Qbs=";
     }
     ."${arch}-${os}-hash";
 in
