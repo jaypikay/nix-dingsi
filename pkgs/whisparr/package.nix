@@ -37,11 +37,11 @@
 in
   stdenv.mkDerivation rec {
     pname = "whisparr";
-    version = "2.0.0.2151";
+    version = "2.2.0-release.108";
 
     src = fetchurl {
       name = "${pname}-${arch}-${os}-${version}.tar.gz";
-      url = "https://whisparr.servarr.com/v1/update/nightly/updatefile?runtime=netcore&version=${version}&arch=${arch}&os=${os}";
+      url = "https://github.com/Whisparr/Whisparr/releases/download/v${version}/Whisparr.${version}.${os}-${arch}.tar.gz";
       inherit hash;
     };
 
