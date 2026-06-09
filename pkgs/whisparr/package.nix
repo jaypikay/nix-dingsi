@@ -15,16 +15,15 @@
 }: let
   os = "linux";
   system = stdenv.hostPlatform.system;
-  arch = "x64"
+  arch = "x64";
 in
   stdenv.mkDerivation rec {
-    pname = "Whisparr";
+    pname = "whisparr";
     version = "2.2.0-release.108";
 
     hash = "sha256-8nJWUmK/qMGMC9rDp0vGXd2WBZ8pqo075WU7emn2Qbs=";
 
     src = fetchurl {
-      name = "${pname}-${arch}-${os}-${version}.tar.gz";
       url = "https://github.com/Whisparr/Whisparr/releases/download/v${version}/Whisparr.${version}.${os}-${arch}.tar.gz";
       inherit hash;
     };
