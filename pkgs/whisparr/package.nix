@@ -13,25 +13,15 @@
   zlib,
   nixosTests,
 }: let
-  os =
-    if stdenv.hostPlatform.isDarwin
-    then "osx"
-    else "linux";
+  os = "linux";
   system = stdenv.hostPlatform.system;
-  arch =
-    {
-      x86_64-linux = "x64";
-    }
-    ."${system}" or (throw "Unsupported system: ${system}");
-  hash =
-    {
-      x64-linux-hash = "sha256-8nJWUmK/qMGMC9rDp0vGXd2WBZ8pqo075WU7emn2Qbs=";
-    }
-    ."${arch}-${os}-hash";
+  arch = "x64"
 in
   stdenv.mkDerivation rec {
-    pname = "whisparr";
+    pname = "Whisparr";
     version = "2.2.0-release.108";
+
+    hash = "sha256-8nJWUmK/qMGMC9rDp0vGXd2WBZ8pqo075WU7emn2Qbs=";
 
     src = fetchurl {
       name = "${pname}-${arch}-${os}-${version}.tar.gz";
@@ -67,7 +57,6 @@ in
     '';
 
     passthru = {
-      updateScript = ./update.sh;
       tests.smoke-test = nixosTests.whisparr;
     };
 
@@ -77,9 +66,6 @@ in
       changelog = "https://whisparr.servarr.com/v1/update/nightly/changes";
       license = lib.licenses.gpl3Only;
       platforms = [
-        "aarch64-darwin"
-        "aarch64-linux"
-        "x86_64-darwin"
         "x86_64-linux"
       ];
       sourceProvenance = [lib.sourceTypes.binaryNativeCode];
