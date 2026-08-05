@@ -1,15 +1,16 @@
-{ lib, fetchFromGitHub }:
-let
-  version = "0.23.1";
-in
 {
+  lib,
+  fetchFromGitHub,
+}: let
+  version = "0.26.0";
+in {
   inherit version;
 
   src = fetchFromGitHub {
     owner = "Donkie";
     repo = "Spoolman";
     rev = "v${version}";
-    hash = "sha256-Oa/cNmpc0hWRf0EQI5aXIE/p9//Sos5Nj3QFEjKgj5o=";
+    hash = lib.fakeHash;
   };
 
   meta = {
