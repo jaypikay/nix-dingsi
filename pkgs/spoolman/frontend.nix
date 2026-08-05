@@ -10,14 +10,14 @@ buildNpmPackage {
 
   src = "${common.src}/client";
 
-  npmDepsHash = "sha256-8ojD7xMxRE9+b4O7vJdwKwrg8aYukYc3l+LF5enKFgA=";
+  npmDepsHash = "sha256-FcIfO5d5atxoa0VM09apfPAHc+UCR0BMiLSxCfGPcxQ=";
 
   VITE_APIURL = "/api/v1";
 
   installPhase = "cp -r dist $out";
 
   meta = common.meta // {
-    description = "Spoolman frontend";
+    description = "Spoolman legacy (React) frontend";
     mainProgram = "spoolman-frontend";
   };
 }

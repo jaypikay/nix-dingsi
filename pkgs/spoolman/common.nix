@@ -10,7 +10,7 @@ in {
     owner = "Donkie";
     repo = "Spoolman";
     rev = "v${version}";
-    hash = lib.fakeHash;
+    hash = "sha256-qcVkQx+e348cphOe+Z7WXGbUvayxHJ7pJJKwHxrWv+k=";
   };
 
   meta = {
