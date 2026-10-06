@@ -4,7 +4,6 @@
   lib,
   nixosTests,
   nodejs,
-  stash,
   stdenv,
   testers,
   fetchPnpmDeps,
@@ -119,7 +118,7 @@ in
       tests = {
         inherit (nixosTests) stash;
         version = testers.testVersion {
-          package = stash;
+          package = finalAttrs.finalPackage;
           version = "v${finalAttrs.version} (${finalAttrs.gitHash}) - Unofficial Build - ${appDate}";
         };
       };
