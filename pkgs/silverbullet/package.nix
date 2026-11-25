@@ -10,7 +10,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "silverbullet";
-  version = "2.11.1";
+  version = "3.0.0";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
