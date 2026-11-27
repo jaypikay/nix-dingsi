@@ -6,7 +6,7 @@
   nixosTests,
   stdenv,
   stdenvNoCC,
-  writeShellScript,
+  writeShellScriptBin,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "silverbullet";
@@ -31,30 +31,58 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchzip {
         url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-linux-x86_64.zip";
-        hash = "sha256-/nQi3fp9SuL6o660964VSmWIkM1eMNqSan1tnA8BVEQ=";
+        hash = "sha256-xoDcTfbBKP1OevKn2k+w/19Luf/biya2fDz87Dwygiw=";
         stripRoot = false;
       };
       "aarch64-linux" = fetchzip {
         url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-linux-aarch64.zip";
-        hash = "sha256-RMwE8UqHKBMTST+py8aOg2GR5Z/xZn1PoBpj2uFZlZc=";
+        hash = "sha256-dO+DOfdYocltr2vLnp1V/ovlWaEHKnS0qYq9u+FScnA=";
         stripRoot = false;
       };
       "x86_64-darwin" = fetchzip {
         url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-darwin-x86_64.zip";
-        hash = "sha256-adTykfBii+9cNehvl4OYfVbgKM/XKkGHVEElWQc0XMs=";
+        hash = "sha256-9Z+GxBiF7hcnrwno00UB1d6KIJcmHfKqS1CKljl5FjE=";
         stripRoot = false;
       };
       "aarch64-darwin" = fetchzip {
         url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-darwin-aarch64.zip";
-        hash = "sha256-u8eFQTkjWyPudpBr2wertdC6+ndEGt0PRkq3AHKWo/Y=";
+        hash = "sha256-RzmhHBfq3xCl2I7wsvP/gYphsj55P4OwWzIrq1iK4IA=";
         stripRoot = false;
       };
     };
 
-    updateScript = writeShellScript "update-silverbullet" ''
-      NEW_VERSION="$1"
+    updateScript = writeShellScriptBin "update-silverbullet" ''
+      set -eu
+      if [ "$#" -ne 1 ] || [[ ! "$1" =~ ^[0-9A-Za-z][0-9A-Za-z._+-]*$ ]]; then
+        echo "Usage: update-silverbullet <new-version>" >&2
+        exit 1
+      fi
+
+      package=pkgs/silverbullet/package.nix
+      if [ ! -f "$package" ]; then
+        echo "Run this updater from the repository root." >&2
+        exit 1
+      fi
+      if [ -e "$package.cmp" ] || [ -e silverbullet.fetchlog ]; then
+        echo "Remove the existing updater backup or fetch log before running." >&2
+        exit 1
+      fi
+
+      backup=$(mktemp)
+      cp "$package" "$backup"
+      cleanup() {
+        status=$?
+        if [ "$status" -ne 0 ]; then
+          cp "$backup" "$package"
+          rm -f "$package.cmp" silverbullet.fetchlog
+          echo "Update failed; restored $package." >&2
+        fi
+        rm -f "$backup"
+      }
+      trap cleanup EXIT
+
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        ${lib.getExe' common-updater-scripts "update-source-version"} "silverbullet" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+        ${lib.getExe' common-updater-scripts "update-source-version"} "silverbullet" "$1" --ignore-same-version --file="$package" --source-key="sources.$platform"
       done
     '';
 

@@ -104,6 +104,8 @@ hash. Pass the new version explicitly:
 nix run .#silverbullet.updateScript -- 3.0.2
 ```
 
+The updater uses the non-flake `default.nix` entry point, so `<nixpkgs>` must be
+available through `NIX_PATH`. It restores the package file if an update fails.
 Review the resulting diff and build each platform you can support. Its source
 hashes live under `passthru.sources`.
 
